@@ -1,14 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#4ade80" />
   <title>BrainStart</title>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
+      font-family: Arial, sans-serif;
       background: #f0fdf4;
       color: #065f46;
       text-align: center;
@@ -53,56 +52,60 @@
     }
 
     function generateProblems() {
-      const problems = [];
+      var problems = [];
 
-      // 덧셈/뺄셈
-      problems.push({ q: \`\${getRandomInt(20, 99)} + \${getRandomInt(10, 50)}\`, a: null });
-      problems.push({ q: \`\${getRandomInt(50, 150)} - \${getRandomInt(10, 49)}\`, a: null });
+      // 덧셈/뺄셈 문제
+      problems.push({ q: getRandomInt(20, 99) + " + " + getRandomInt(10, 50), a: null });
+      problems.push({ q: getRandomInt(50, 150) + " - " + getRandomInt(10, 49), a: null });
 
-      // 곱셈/나눗셈
-      const a1 = getRandomInt(5, 15), b1 = getRandomInt(5, 12);
-      problems.push({ q: \`\${a1} × \${b1}\`, a: a1 * b1 });
-      const a2 = getRandomInt(2, 12), b2 = getRandomInt(2, 12);
-      problems.push({ q: \`\${a2 * b2} ÷ \${a2}\`, a: b2 });
+      // 곱셈/나눗셈 문제
+      var a1 = getRandomInt(5, 15), b1 = getRandomInt(5, 12);
+      problems.push({ q: a1 + " × " + b1, a: a1 * b1 });
+      var a2 = getRandomInt(2, 12), b2 = getRandomInt(2, 12);
+      problems.push({ q: (a2 * b2) + " ÷ " + a2, a: b2 });
 
-      // 지수/로그
-      const exp = getRandomInt(2, 5);
-      problems.push({ q: \`2^\${exp}\`, a: Math.pow(2, exp) });
-      const logVal = Math.pow(10, getRandomInt(1, 4));
-      problems.push({ q: \`log₁₀(\${logVal})\`, a: Math.log10(logVal) });
+      // 지수/로그 문제
+      var exp = getRandomInt(2, 5);
+      problems.push({ q: "2^" + exp, a: Math.pow(2, exp) });
+      var logVal = Math.pow(10, getRandomInt(1, 4));
+      problems.push({ q: "log₁₀(" + logVal + ")", a: Math.log10(logVal) });
 
-      // 삼각함수 (고정)
-      problems.push({ q: 'sin(30°)', a: 0.5 });
-      problems.push({ q: 'cos(60°)', a: 0.5 });
-      problems.push({ q: 'tan(45°)', a: 1 });
+      // 삼각함수 (고정 문제)
+      problems.push({ q: "sin(30°)", a: 0.5 });
+      problems.push({ q: "cos(60°)", a: 0.5 });
+      problems.push({ q: "tan(45°)", a: 1 });
 
-      return problems.sort(() => 0.5 - Math.random()).slice(0, 7);
+      // 문제들을 섞고 7문제만 선택
+      problems.sort(function() { return 0.5 - Math.random(); });
+      return problems.slice(0, 7);
     }
 
-    const shuffled = generateProblems();
-    const form = document.getElementById('quiz-form');
+    var shuffled = generateProblems();
+    var form = document.getElementById("quiz-form");
 
-    shuffled.forEach((p, i) => {
+    shuffled.forEach(function(p, i) {
       if (p.a === null) {
-        p.a = eval(p.q.replace('×', '*').replace('÷', '/'));
+        // 문제 문자열에서 곱셈과 나눗셈 기호 변환 후 계산
+        p.a = eval(p.q.replace("×", "*").replace("÷", "/"));
       }
 
-      const div = document.createElement('div');
-      div.className = 'question';
-      div.innerHTML = \`
-        <label>\${i + 1}. \${p.q} = </label><br>
-        <input type="number" step="any" id="q\${i}" />
-      \`;
+      var div = document.createElement("div");
+      div.className = "question";
+      div.innerHTML =
+        "<label>" + (i + 1) + ". " + p.q + " = </label><br>" +
+        '<input type="number" step="any" id="q' + i + '" />';
       form.appendChild(div);
     });
 
     function submitQuiz() {
-      let correct = 0;
-      shuffled.forEach((p, i) => {
-        const val = parseFloat(document.getElementById(\`q\${i}\`).value);
+      var correct = 0;
+      shuffled.forEach(function(p, i) {
+        var val = parseFloat(document.getElementById("q" + i).value);
         if (Math.abs(val - p.a) < 0.01) correct++;
       });
-      document.getElementById('result').innerHTML = \`🎉 축하합니다! 총 \${shuffled.length}문제 중 \${correct}문제를 맞추셨습니다!<br>당신의 뇌가 이제 예열되었습니다. 바로 공부 스타트~ 💪\`;
+      document.getElementById("result").innerHTML =
+        "🎉 축하합니다! 총 " + shuffled.length + "문제 중 " + correct + "문제를 맞추셨습니다!<br>" +
+        "당신의 뇌가 이제 예열되었습니다. 바로 공부 스타트~ 💪";
     }
   </script>
 </body>
